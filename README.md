@@ -5,3 +5,4 @@ Simple tool for seeing which things someone paid for when they paid you in a lum
 - Dynamic price list headings
 - Price list file picker?
 - Enter base prices and have tip and/or tax calculated, or any combination of the above
+- Actual test suite lol
