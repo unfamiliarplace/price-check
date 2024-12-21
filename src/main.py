@@ -5,6 +5,8 @@ import csv
 PATH_PRICE_LISTS = Path('src/data/prices.csv')
 PRICE_LIST_NAMES = ('Base prices', 'With tax', 'With tip')
 
+# TEST VALUE: $34.23
+
 def read_price_lists() -> list[tuple[int]]:
     lists = [[], [], []]
 
@@ -42,10 +44,6 @@ def prompt_target() -> int:
 
     return normalize_price(t)
 
-# def to_prices(s: str) -> list[int]:
-#     prices = list(filter(None, (line.strip() for line in s.split('\n'))))
-#     return tuple(normalize_price(p) for p in prices)
-
 def get_combo_sums(prices: list[int]) -> dict[tuple[int], int]:
 
     # Obviously very inefficient if more than a few options
@@ -54,9 +52,6 @@ def get_combo_sums(prices: list[int]) -> dict[tuple[int], int]:
     for n in range(1, len(prices) + 1):
         for combo in combinations(prices, n):
             d[combo] = sum(combo)
-
-            # test
-            # print((' + '.join(str(n) for n in combo)).ljust(36), '=', sum(combo))
 
     return d
 
