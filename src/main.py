@@ -5,8 +5,6 @@ import csv
 PATH_PRICE_LISTS = Path('src/data/prices.csv')
 PRICE_LIST_NAMES = ('Base prices', 'With tax', 'With tip')
 
-# TEST VALUE: $34.23
-
 def read_price_lists() -> list[tuple[int]]:
     lists = [[], [], []]
 
