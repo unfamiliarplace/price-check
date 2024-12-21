@@ -1,4 +1,4 @@
-from itertools import combinations
+import itertools
 from pathlib import Path
 import csv
 
@@ -50,7 +50,7 @@ def get_combo_sums(prices: list[int]) -> dict[tuple[int], int]:
 
     d = {}
     for n in range(1, len(prices) + 1):
-        for combo in combinations(prices, n):
+        for combo in itertools.combinations(prices, n):
             d[combo] = sum(combo)
 
     return d
@@ -70,7 +70,18 @@ def get_matching_combos(target: int, prices: tuple[int]) -> list[int]:
     
 def fmt_price(p: int) -> str:
     p = str(p)
-    return f'${p[:-2]}.{p[-2:]}'
+    cents = p[-2:].zfill(2)
+
+    if len(p) < 3:
+        dollars = '0'
+
+    else:
+        dollars = p[:-2]
+        chunks = itertools.batched(dollars[::-1], 3)
+        chunks = list(''.join(chunk[::-1]) for chunk in chunks)[::-1]
+        dollars = ','.join(chunks)
+
+    return f'${dollars}.{cents}'
 
 def fmt_combo(combo: tuple[int]) -> str:
     return ' + '.join(fmt_price(p) for p in combo)
@@ -84,11 +95,26 @@ def run() -> None:
     print(f'Searching for combinations that add to {fmt_price(target)}...')
     print()
 
+    any_price_lists = False
+    any_valid_combos = False
+
     for (i, prices) in enumerate(read_price_lists()):
         if prices:
-            print(PRICE_LIST_NAMES[i])
-            print(fmt_combos(get_matching_combos(target, prices)))
-            print()
+            any_price_lists = True
+
+            combos = get_matching_combos(target, prices)
+            if combos:
+                any_valid_combos = True
+
+                print(PRICE_LIST_NAMES[i])
+                print(fmt_combos(combos))
+                print()
+    
+    if not any_price_lists:
+        print('No price lists found')
+
+    elif not any_valid_combos:
+        print('No matching combinations of prices found')
 
 if __name__ == '__main__':
     run()
